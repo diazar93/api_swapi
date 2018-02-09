@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<!-- 
+			Autor: Alberto Díaz Arenas
+			Módulo: Desarrollo de Interfaces
+			Grado: Desarrollo de Aplicaciones Multiplataforma
+			Instituto: IES Virgen de la Paloma		
+		-->
+		<meta charset="UTF-8">
+		<title>SWAPI</title>
+		<link rel="stylesheet" type="text/css" href="css_swapi.css">
+		<script src="js_swapi.js"></script>
+	</head>
+
+	<body>
+	
+		<header>
+			<img id="imgheader" src="swlogo.jpg"></img>
+		</header>
+		
+		<div id="navegacion">
+			<table>
+				<tr>
+					<td id="menu">Inicio</td>
+					<td id="catpeliculas">Películas</td>
+					<td id="catpersonajes">Personajes</td>
+					<td id="catplanetas">Planetas</td>
+					<td id="catespecies">Especies</td>
+					<td id="catnaves">Naves estelares</td>
+					<td id="catvehiculos">Vehículos</td>
+				</tr>
+			</table>
+		</div>
+		
+		<div id="reproductor">
+			<audio id="medio">
+				<source src="./anakinmarch.mp3">
+			</audio>
+			<div id="botones">
+				<input type="button" id="reproducir" value="Play">
+				<input type="button" id="silenciar" value="Mute">
+			</div>
+			<div id="barra">
+				<div id="progreso"></div>
+			</div>
+			<div id="botonesOrden">
+				<input type="button" id="previous" value="Prev">
+				<input type="button" id="next" value="Next">
+			</div>
+			<div id="clear"></div>
+		</div>
+			
+		<div id="contenedor">
+			
+			
+			<p>Bienvenido a la página principal de SWAPI, la página web oficial acerca del universo de Star Wars cuyo 
+				contenido se obtiene directamente de la API pública <a href="https://swapi.co/">https://swapi.co</a>. 
+				Para visualizarlo basta con hacer click en cada una de las diferentes categorías del panel superior.</p> <br/>
+					
+			<p>“No lo intentes. Hazlo, o no lo hagas, pero no lo intentes.” 
+				(Yoda a Luke Skywalker. STAR WARS, episodio V, El Imperio Contrataca).</p>
+		
+		</div>
+		
+		<footer>
+			<b>COPYRIGHT © Alberto Díaz Arenas  | HTML5 | CSS3</b>
+		</footer>
+		
+	</body>
+
+</html>
