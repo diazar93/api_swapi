@@ -5,7 +5,7 @@ Grado: Desarrollo de Aplicaciones Multiplataforma
 Instituto: IES Virgen de la Paloma
 */
 
-function descargaJSonPeliculas(tipoGeneral, id, tipo) { // descargaJSonPeliculas(id,tipoConsulta)
+function descargaJSon(tipoGeneral, id, tipo) { 
 
 	// Obtener la instancia del objeto XMLHttpRequest
 	if(window.XMLHttpRequest) {
@@ -16,8 +16,8 @@ function descargaJSonPeliculas(tipoGeneral, id, tipo) { // descargaJSonPeliculas
 	}
 	// Preparar la funcion de respuesta
 	peticion_http.onreadystatechange = muestraContenido;
+	
 	// Realizar peticion HTTP
-
 	switch (tipoGeneral) {
 	
 		case 1: // peliculas
@@ -87,7 +87,7 @@ function descargaJSonPeliculas(tipoGeneral, id, tipo) { // descargaJSonPeliculas
 		if(peticion_http.readyState == 4) {
 			if(peticion_http.status == 200) {
 			
-				switch (tipoGeneral) {
+				switch (tipoGeneral) {		// dependiendo de la opcion elegida se llamará a cada uno de los siguientes métodos
 					case 1: // peliculas
 						mostrarListadoPeliculas(tipo,JSON.parse(peticion_http.responseText));
 						break;
@@ -110,15 +110,28 @@ function descargaJSonPeliculas(tipoGeneral, id, tipo) { // descargaJSonPeliculas
 				}
 				
 			}
+			
+			else {	// si ha habido algún error (que los hay, la API tiene algunas páginas incompletas)
+					// se muestra un mensaje de error en un menú flotante
+				var menu = document.getElementById("menuInformacion");
+				var imgError = document.createElement("img");
+				imgError.setAttribute("src", "imgerror.gif");
+				menu.appendChild(imgError);
+				var msgError = document.createElement("p");
+				msgError.appendChild(document.createTextNode("Ups, parece que hay algún error con la información solicitada..."));
+				menu.appendChild(msgError);
+			}
 		}				
 	}
 }
 			
 window.onload = function() {
 
-	iniciar();
+	iniciarReproductor();
 	
-	divContenedor = document.getElementById("contenedor");
+	// cargo el div que va a contener toda la información además de cada uno de los elementos de la barra de navegación
+	
+	divContenedor = document.getElementById("contenedor"); 
 	
 	var menuinicio = document.getElementById("menu");
 	var categoriaPeliculas = document.getElementById("catpeliculas");
@@ -138,30 +151,46 @@ window.onload = function() {
 	categorias[5] = categoriaNaves;
 	categorias[6] = categoriaVehiculos;
 	
+	// a cada elemento del menú le aplico unas funciones para cambiar el color de fondo si se pasa con el ratón por encima 
+	// o si se hace click en cada uno de ellos
+	
 	for (var i = 0; i < categorias.length; i++) {
 			categorias[i].setAttribute("onmouseover","cambiarFondo("+i+",true)");
 			categorias[i].setAttribute("onmouseout","cambiarFondo("+i+",false)");
 			categorias[i].setAttribute("onclick","obtenerInformacion("+i+")");
 	}
 	
+	// en la variable global textoMenuInicio guardo el contenido inicial correspondiente al menú inicio. Ya que es solo texto
+	// lo guardo usando el innerHTML 
+	
 	textoMenuInicio = divContenedor.innerHTML;
 
 }
 
-function iniciar() {
+// esta función se encarga de controlar el funcionamiento del reproductor de música
+function iniciarReproductor() {
 	maximo = 400;
-	mmedio = document.getElementById('medio');
+	indiceCancion = 0;
+	canciones = document.getElementsByTagName('audio'); // guardo todos los audios en una variable global canciones
+	cancionParaReproducir = canciones[indiceCancion]; // en todo momento y usando el índice creado antes elijo la canción en concreto que se va a reproducir
 	reproducir = document.getElementById('reproducir');
 	barra = document.getElementById('barra');
 	progreso = document.getElementById('progreso');
 	silenciar = document.getElementById('silenciar');
-	reproducir.onclick = cambiar;
+	prev = document.getElementById('prev');
+	next = document.getElementById('next');
+	settings = document.getElementById('settings');
+	
+	// a partir de aquí defino el funcionamiento y comportamiento de cada uno de los botones de control del reproductor
+	
+	reproducir.onclick = reproducirOPausar;
 	reproducir.onmouseover = function() {
 		reproducir.style.backgroundColor = "rgb(162, 0, 0)";
 	}
 	reproducir.onmouseout = function() {
 		reproducir.style.backgroundColor = "rgb(204, 204, 204)";
 	}
+	
 	silenciar.onclick = sonido;
 	silenciar.onmouseover = function() {
 		silenciar.style.backgroundColor = "rgb(162, 0, 0)";
@@ -169,26 +198,89 @@ function iniciar() {
 	silenciar.onmouseout = function() {
 		silenciar.style.backgroundColor = "rgb(204, 204, 204)";
 	}
+	
+	prev.onclick = modificarIndice;
+	prev.onmouseover = function() {
+		prev.style.backgroundColor = "rgb(162, 0, 0)";
+	}
+	prev.onmouseout = function() {
+		prev.style.backgroundColor = "rgb(204, 204, 204)";
+	}
+	
+	next.onclick = modificarIndice;
+	next.onmouseover = function() {
+		next.style.backgroundColor = "rgb(162, 0, 0)";
+	}
+	next.onmouseout = function() {
+		next.style.backgroundColor = "rgb(204, 204, 204)";
+	}
+	
+	settings.onclick = modificarOpciones;
+	settings.onmouseover = function() {
+		settings.style.backgroundColor = "rgb(162, 0, 0)";
+	}
+	settings.onmouseout = function() {
+		settings.style.backgroundColor = "rgb(204, 204, 204)";
+	}
+	
 	barra.onclick = mover;
 }
 
-function cambiar(){
+function modificarOpciones() {
 
-	if(!mmedio.paused && !mmedio.ended){
-		mmedio.pause();
+	crearMenu(settings);
+
+}
+
+// con esta función se cambia el índice para elegir la canción a reproducir, además de resetear la barra de estado.
+// este cambio lo hago de forma "circular", de la última canción se pasa a la primera y viceversa
+function modificarIndice() {
+	cancionParaReproducir.pause();
+	reproducir.value = 'Play';
+	clearInterval(bucle);
+	switch(this.id) {
+		case "prev":
+			if (indiceCancion == 0) {
+				indiceCancion = canciones.length-1;
+			}
+			else {
+				indiceCancion = indiceCancion - 1 ;				
+			}				
+			break;
+			
+		case "next":
+			if (indiceCancion == canciones.length-1) {
+				indiceCancion = 0;
+			}
+			else {
+				indiceCancion = indiceCancion + 1 ;				
+			}			
+			break;
+	}
+	cancionParaReproducir = canciones[indiceCancion];
+	cancionParaReproducir.play();
+	reproducir.value = 'Pause';
+	bucle = setInterval(estado, 1000);
+}
+
+// función para reproducir o pausar la canción
+function reproducirOPausar(){
+	if(!cancionParaReproducir.paused && !cancionParaReproducir.ended){
+		cancionParaReproducir.pause();
 		reproducir.value = 'Play';
 		clearInterval(bucle);
 	}
 	else{
-		mmedio.play();
+		cancionParaReproducir.play();
 		reproducir.value = 'Pause';
 		bucle = setInterval(estado, 1000);
 	}
 }
 
+// función que controla el movimiento de la barra de progreso acorde a la canción mientras ésta se reproduce
 function estado(){
-	if(!mmedio.ended){
-		var tamano = parseInt(mmedio.currentTime * maximo / mmedio.duration);
+	if(!cancionParaReproducir.ended){
+		var tamano = parseInt(cancionParaReproducir.currentTime * maximo / cancionParaReproducir.duration);
 		progreso.style.width = tamano + 'px';
 	}
 	else{
@@ -198,39 +290,47 @@ function estado(){
 	}
 }
 
+// si se quiere adelantar o retrasar manualmente la canción esta función se encara de ello
 function mover(e){
-	if(!mmedio.paused && !mmedio.ended){
+	if(!cancionParaReproducir.paused && !cancionParaReproducir.ended){
 		var ratonX = e.pageX - barra.offsetLeft;
-		var nuevotiempo = ratonX * mmedio.duration / maximo;
-		mmedio.currentTime = nuevotiempo;
+		var nuevotiempo = ratonX * cancionParaReproducir.duration / maximo;
+		cancionParaReproducir.currentTime = nuevotiempo;
 		progreso.style.width = ratonX + 'px';
 	}
 }
 
+// función para mutear o desmutear la canción
 function sonido(){
 	if(silenciar.value == 'Mute'){
-		mmedio.muted = true;
+		cancionParaReproducir.muted = true;
 		silenciar.value = 'Audio';
 	}
 	else{
-		mmedio.muted = false;
+		cancionParaReproducir.muted = false;
 		silenciar.value = 'Mute';
 	}
 }
 
+// función para cambiar el color de fondo de los elementos del menú de navegación comforme pasas el ratón por encima de ellos
 function cambiarFondo(pos,entrar) {
-	if (entrar) 
+	if (entrar) // onmouseover
 		categorias[pos].style.backgroundColor = "rgb(162, 0, 0)";
-	else 
+	else	// onmouseout
 		categorias[pos].style.backgroundColor = "rgb(51, 51, 51)";
 }
 
-function limpiarContenedor() { // método que limpia el contenido del div contenedor
+
+// método que limpia el contenido del div contenedor
+function limpiarContenedor() { 
 	while (divContenedor.firstChild) {
 		divContenedor.removeChild(divContenedor.firstChild);
 	}
 }
 
+
+// una vez se hace click en un elemento del menú de navegación se llama a esta función, que crea en el div contenedor
+// un título orientativo además de realizar la llamada correspondiente a la API.
 function obtenerInformacion(posicion) {
 
 	var titulo = document.createElement("h2");
@@ -247,7 +347,7 @@ function obtenerInformacion(posicion) {
 			limpiarContenedor();
 			titulo.appendChild(document.createTextNode("Listado de películas"));
 			divContenedor.appendChild(titulo);
-			descargaJSonPeliculas(posicion,0,"general"); 
+			descargaJSon(posicion,0,"general"); 
 			
 			break;
 			
@@ -255,40 +355,43 @@ function obtenerInformacion(posicion) {
 			limpiarContenedor();
 			titulo.appendChild(document.createTextNode("Listado de personajes"));
 			divContenedor.appendChild(titulo);
-			descargaJSonPeliculas(posicion,0,"general"); 
+			descargaJSon(posicion,0,"general"); 
 			break;
 			
 		case 3: // planetas
 			limpiarContenedor();
 			titulo.appendChild(document.createTextNode("Listado de planetas"));
 			divContenedor.appendChild(titulo);
-			descargaJSonPeliculas(posicion,0,"general"); 
+			descargaJSon(posicion,0,"general"); 
 			break;
 			
 		case 4: // especies
 			limpiarContenedor();
 			titulo.appendChild(document.createTextNode("Listado de especies"));
 			divContenedor.appendChild(titulo);
-			descargaJSonPeliculas(posicion,0,"general"); 
+			descargaJSon(posicion,0,"general"); 
 			break;
 		
 		case 5: // naves
 			limpiarContenedor();
 			titulo.appendChild(document.createTextNode("Listado de naves"));
 			divContenedor.appendChild(titulo);
-			descargaJSonPeliculas(posicion,0,"general"); 
+			descargaJSon(posicion,0,"general"); 
 			break;
 			
 		case 6: // vehículos
 			limpiarContenedor();
 			titulo.appendChild(document.createTextNode("Listado de vehículos"));
 			divContenedor.appendChild(titulo);
-			descargaJSonPeliculas(posicion,0,"general"); 
+			descargaJSon(posicion,0,"general"); 
 			break;
 	}
 	
 }
 
+
+// esta función crea un menú flotante cuando se hace click en un elemento en concreto de los que devuelve la API 
+// cuando se ha hecho click anteriormente en una categoría del menú de navegación
 function crearMenu(elem) {
 
 	var menu = document.createElement("div");
@@ -298,7 +401,7 @@ function crearMenu(elem) {
 	var anchoMenu = 520;
 	menu.style.width = anchoMenu + "px";
 	menu.style.height = altoMenu + "px";
-	menu.style.top = elem.offsetTop - 300 + "px";
+	menu.style.top = elem.offsetTop - 240 + "px";
 	menu.style.left = document.body.offsetWidth/2 - anchoMenu/2 + "px";
 	menu.style.marginLeft = "auto";
 	menu.style.marginRight = "auto";
@@ -316,8 +419,8 @@ function crearMenu(elem) {
 	var altoBoton = 40;
 	var anchoBoton = 40;
 	botonSalir.style.position = "absolute";
-	botonSalir.style.top = "5px";
-	botonSalir.style.left = (anchoMenu - anchoBoton/2)+"px";
+	botonSalir.style.top = "1px";
+	botonSalir.style.left = (anchoMenu - anchoBoton/4)+"px";
 	botonSalir.style.padding = "5px";
 	botonSalir.style.margin = "5px";
 	botonSalir.style.borderRadius = "5px";
@@ -339,6 +442,9 @@ function crearMenu(elem) {
 	document.body.appendChild(menu); 
 }
 
+
+// para evitar que se puedan superponer varios menús se borra el que hay anteriormente si se hace click en otro elemento
+// que asu vez genere otro menú
 function limpiarMenusInformacion() {
 	var aux = document.getElementById("menuInformacion");
 	if (aux) {
@@ -348,6 +454,10 @@ function limpiarMenusInformacion() {
 
 // Funciones relativas a las peliculas
 
+// esta función hace la llamada a la API para obtener los datos de una película en concreto. Como en la API las
+// películas vienen en el orden tal cual se publicaron he tendio que hacer un arreglo básico para consultarlas 
+// en el orden que quiero. Si quiero consultar los datos del Episodio 1, que me muestre los del Episodio 1 y no
+// los del Episodio 4 (que en teoría es la primera película de Star Wars)
 function mostrarInformacionPelicula(id) {
 
 	limpiarMenusInformacion();
@@ -362,9 +472,12 @@ function mostrarInformacionPelicula(id) {
 			break;
 		}
 	}	
-	descargaJSonPeliculas(1,res,"pelicula");	 
+	descargaJSon(1,res,"pelicula");	 
 }
 
+
+// dependiendo de como hemos llamado a la función que descarga el JSON correspondiente se mostrará en el div contenedor
+// el listado de todas las películas o se mostrará en el menú flotante creado la información de una película en concreto
 function mostrarListadoPeliculas(tipo,fichero) {
 
 	var lista = document.createElement("ul");
@@ -407,9 +520,9 @@ function mostrarListadoPeliculas(tipo,fichero) {
 		case "general":
 	
 			var numPelis = fichero.count;
-			var arrayResults = fichero.results;
+			var arrayPeliculas = fichero.results;
 			
-			for (var i = 1; i < numPelis; i++) {
+			for (var i = 1; i <= numPelis; i++) {
 				var elementos = document.createElement("li");
 				elementos.style.width = "280px";
 				elementos.style.margin = "5px";
@@ -422,7 +535,30 @@ function mostrarListadoPeliculas(tipo,fichero) {
 				enlace.style.display = "block";
 				enlace.style.textAlign = "center";	
 				enlace.style.padding = "15px";	
-				enlace.appendChild(document.createTextNode("Episodio #" + i));
+				
+				switch(i) {
+					case 1:
+						enlace.appendChild(document.createTextNode(arrayPeliculas[2].title));
+						break;
+					case 2:
+						enlace.appendChild(document.createTextNode(arrayPeliculas[1].title));
+						break;
+					case 3:
+						enlace.appendChild(document.createTextNode(arrayPeliculas[3].title));
+						break;
+					case 4:
+						enlace.appendChild(document.createTextNode(arrayPeliculas[0].title));
+						break;
+					case 5:
+						enlace.appendChild(document.createTextNode(arrayPeliculas[5].title));
+						break;
+					case 6:
+						enlace.appendChild(document.createTextNode(arrayPeliculas[4].title));
+						break;
+					case 7:
+						enlace.appendChild(document.createTextNode(arrayPeliculas[6].title));
+						break;
+				}
 				
 				elementos.appendChild(enlace);
 				lista.appendChild(elementos);
@@ -438,7 +574,17 @@ function mostrarInformacionPersonaje(id) {
 
 	limpiarMenusInformacion();
 	crearMenu(document.getElementById("personaje"+id));
-	descargaJSonPeliculas(2,id,"personaje");
+	descargaJSon(2,id,"personaje");
+}
+
+function cogerDigito(cadena) {
+	var res = "";
+	for (var i = 0; i < cadena.length; i++) {
+		if (!isNaN(cadena.charAt(i))) {
+			res = res + cadena.charAt(i) + "";
+		}
+	}
+	return res;
 }
 
 function mostrarListadoPersonajes(tipo,fichero) { 
@@ -486,7 +632,8 @@ function mostrarListadoPersonajes(tipo,fichero) {
 	
 			var numPersonajes = fichero.count;
 			
-			for (var i = 1; i <= numPersonajes; i++) {
+			for (var i = 1; i < numPersonajes; i++) {
+			
 				var elementos = document.createElement("li");
 				elementos.style.width = "280px";
 				elementos.style.margin = "5px";
@@ -515,7 +662,7 @@ function mostrarInformacionPlaneta(id) {
 
 	limpiarMenusInformacion();
 	crearMenu(document.getElementById("planeta"+id));
-	descargaJSonPeliculas(3,id,"planeta");
+	descargaJSon(3,id,"planeta");
 }
 
 function mostrarListadoPlanetas(tipo,fichero) { 
@@ -595,7 +742,7 @@ function mostrarInformacionEspecie(id) {
 
 	limpiarMenusInformacion();
 	crearMenu(document.getElementById("especie"+id));
-	descargaJSonPeliculas(4,id,"especie");
+	descargaJSon(4,id,"especie");
 }
 
 function mostrarListadoEspecies(tipo,fichero) { 
@@ -675,7 +822,7 @@ function mostrarInformacionNave(id) {
 
 	limpiarMenusInformacion();
 	crearMenu(document.getElementById("nave"+id));
-	descargaJSonPeliculas(5,id,"nave");
+	descargaJSon(5,id,"nave");
 }
 
 function mostrarListadoNaves(tipo,fichero) { 
@@ -767,7 +914,7 @@ function mostrarInformacionVehiculo(id) {
 
 	limpiarMenusInformacion();
 	crearMenu(document.getElementById("vehiculo"+id));
-	descargaJSonPeliculas(6,id,"vehiculo");
+	descargaJSon(6,id,"vehiculo");
 }
 
 function mostrarListadoVehiculos(tipo,fichero) { 
