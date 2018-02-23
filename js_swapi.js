@@ -524,7 +524,7 @@ function mostrarListadoPeliculas(tipo,fichero) {
 			
 			for (var i = 1; i <= numPelis; i++) {
 				var elementos = document.createElement("li");
-				elementos.style.width = "280px";
+				elementos.style.width = "270px";
 				elementos.style.margin = "5px";
 				elementos.style.border = "1px solid black";
 				elementos.style.float = "left";
@@ -577,16 +577,6 @@ function mostrarInformacionPersonaje(id) {
 	descargaJSon(2,id,"personaje");
 }
 
-function cogerDigito(cadena) {
-	var res = "";
-	for (var i = 0; i < cadena.length; i++) {
-		if (!isNaN(cadena.charAt(i))) {
-			res = res + cadena.charAt(i) + "";
-		}
-	}
-	return res;
-}
-
 function mostrarListadoPersonajes(tipo,fichero) { 
 
 	var lista = document.createElement("ul");
@@ -635,7 +625,7 @@ function mostrarListadoPersonajes(tipo,fichero) {
 			for (var i = 1; i < numPersonajes; i++) {
 			
 				var elementos = document.createElement("li");
-				elementos.style.width = "280px";
+				elementos.style.width = "270px";
 				elementos.style.margin = "5px";
 				elementos.style.border = "1px solid black";
 				elementos.style.float = "left";
@@ -715,7 +705,7 @@ function mostrarListadoPlanetas(tipo,fichero) {
 			
 			for (var i = 1; i <= numPlanetas; i++) {
 				var elementos = document.createElement("li");
-				elementos.style.width = "280px";
+				elementos.style.width = "270px";
 				elementos.style.margin = "5px";
 				elementos.style.border = "1px solid black";
 				elementos.style.float = "left";
@@ -795,7 +785,7 @@ function mostrarListadoEspecies(tipo,fichero) {
 			
 			for (var i = 1; i <= numEspecies; i++) {
 				var elementos = document.createElement("li");
-				elementos.style.width = "280px";
+				elementos.style.width = "270px";
 				elementos.style.margin = "5px";
 				elementos.style.border = "1px solid black";
 				elementos.style.float = "left";
@@ -887,7 +877,7 @@ function mostrarListadoNaves(tipo,fichero) {
 			
 			for (var i = 1; i <= numNaves; i++) {
 				var elementos = document.createElement("li");
-				elementos.style.width = "280px";
+				elementos.style.width = "270px";
 				elementos.style.margin = "5px";
 				elementos.style.border = "1px solid black";
 				elementos.style.float = "left";
@@ -973,7 +963,7 @@ function mostrarListadoVehiculos(tipo,fichero) {
 			
 			for (var i = 1; i <= numVehiculos; i++) {
 				var elementos = document.createElement("li");
-				elementos.style.width = "280px";
+				elementos.style.width = "270px";
 				elementos.style.margin = "5px";
 				elementos.style.border = "1px solid black";
 				elementos.style.float = "left";
