@@ -13,8 +13,7 @@ function descargaJSon(tipoGeneral, id, tipo) {
 	var parrafoCargando = document.createElement("p");
 	parrafoCargando.appendChild(document.createTextNode("Cargando..."));
 	parrafoCargando.style.textAlign = "center";
-	menuCargando.appendChild(parrafoCargando);
-	
+	menuCargando.appendChild(parrafoCargando);	
 
 	// Obtener la instancia del objeto XMLHttpRequest
 	if(window.XMLHttpRequest) {
@@ -31,7 +30,7 @@ function descargaJSon(tipoGeneral, id, tipo) {
 	
 		case 1: // peliculas
 			if (tipo == "general") {
-				peticion_http.open('GET', 'https://swapi.co/api/films/?page=', true);
+				peticion_http.open('GET', 'https://swapi.co/api/films/', true);
 				tipo = "general";
 			}
 			else {
@@ -141,6 +140,17 @@ function descargaJSon(tipoGeneral, id, tipo) {
 			
 window.onload = function() {
 
+	arrayGeneral = ["https://swapi.co/api/films/",
+					"https://swapi.co/api/people/?page=1",
+					"https://swapi.co/api/people/?page=2",
+					"https://swapi.co/api/people/?page=3",
+					"https://swapi.co/api/people/?page=4",
+					"https://swapi.co/api/people/?page=5",
+					"https://swapi.co/api/people/?page=6",
+					"https://swapi.co/api/people/?page=7",
+					"https://swapi.co/api/people/?page=8",
+					"https://swapi.co/api/people/?page=9"];
+
 	iniciarReproductor();
 	
 	// cargo el div que va a contener toda la información además de cada uno de los elementos de la barra de navegación
@@ -154,7 +164,6 @@ window.onload = function() {
 	var categoriaEspecies = document.getElementById("catespecies");
 	var categoriaNaves = document.getElementById("catnaves");
 	var categoriaVehiculos = document.getElementById("catvehiculos");
-	
 	
 	categorias = [];
 	categorias[0] = menuinicio;	
@@ -175,15 +184,47 @@ window.onload = function() {
 	}
 	
 	// en la variable global textoMenuInicio guardo el contenido inicial correspondiente al menú inicio. Ya que es solo texto
-	// lo guardo usando el innerHTML 
-	
+	// lo guardo usando el innerHTML 	
 	textoMenuInicio = divContenedor.innerHTML;
-
+	
+	inputBusqueda = document.getElementById("inputBusqueda");
+	inputBusqueda.setAttribute("placeholder","Dato a buscar...");
+	inputBusqueda.style.width = "210px";
+	inputBusqueda.style.padding = "1px";
+	inputBusqueda.onkeypress = comprobarTecla;
+	
+	botonBusqueda = document.getElementById("botonBusqueda");
+	botonBusqueda.onclick = function(){ buscar(inputBusqueda.textContent); };
+	botonBusqueda.onmouseover = function() {
+		botonBusqueda.style.backgroundColor = "rgb(162, 0, 0)";
+		botonBusqueda.style.color = "white";
+	}
+	botonBusqueda.onmouseout = function() {
+		botonBusqueda.style.backgroundColor = "rgb(204, 204, 204)";
+		botonBusqueda.style.color = "black";
+	}
 }
+
+function comprobarTecla(evObject) {
+
+	var tecla = evObject.which; 
+	
+	if (tecla == 13) {
+		buscar(inputBusqueda.textContent);
+	}
+	
+}
+
+function buscar(cadena) {
+
+	inputBusqueda.value = "";
+	crearMenu(divContenedor);
+}
+
 
 // esta función se encarga de controlar el funcionamiento del reproductor de música
 function iniciarReproductor() {
-	maximo = 400;
+	maximo = 300;
 	indiceCancion = 0;
 	canciones = document.getElementsByTagName('audio'); // guardo todos los audios en una variable global canciones
 	cancionParaReproducir = canciones[indiceCancion]; // en todo momento y usando el índice creado antes elijo la canción en concreto que se va a reproducir
@@ -200,67 +241,141 @@ function iniciarReproductor() {
 	reproducir.onclick = reproducirOPausar;
 	reproducir.onmouseover = function() {
 		reproducir.style.backgroundColor = "rgb(162, 0, 0)";
+		reproducir.style.color = "white";
 	}
 	reproducir.onmouseout = function() {
 		reproducir.style.backgroundColor = "rgb(204, 204, 204)";
+		reproducir.style.color = "black";
 	}
 	
 	silenciar.onclick = sonido;
 	silenciar.onmouseover = function() {
 		silenciar.style.backgroundColor = "rgb(162, 0, 0)";
+		silenciar.style.color = "white";
 	}
 	silenciar.onmouseout = function() {
 		silenciar.style.backgroundColor = "rgb(204, 204, 204)";
+		silenciar.style.color = "black";
 	}
 	
 	prev.onclick = modificarIndice;
 	prev.onmouseover = function() {
 		prev.style.backgroundColor = "rgb(162, 0, 0)";
+		prev.style.color = "white";
 	}
 	prev.onmouseout = function() {
 		prev.style.backgroundColor = "rgb(204, 204, 204)";
+		prev.style.color = "black";
 	}
 	
 	next.onclick = modificarIndice;
 	next.onmouseover = function() {
 		next.style.backgroundColor = "rgb(162, 0, 0)";
+		next.style.color = "white";
 	}
 	next.onmouseout = function() {
 		next.style.backgroundColor = "rgb(204, 204, 204)";
+		next.style.color = "black";
 	}
 	
 	settings.onclick = modificarOpciones;
 	settings.onmouseover = function() {
 		settings.style.backgroundColor = "rgb(162, 0, 0)";
+		settings.style.color = "white";
 	}
 	settings.onmouseout = function() {
 		settings.style.backgroundColor = "rgb(204, 204, 204)";
+		settings.style.color = "black";
 	}
 	
 	barra.onclick = mover;
 }
 
-
 // función para controlar las canciones, y listarlas gráficamente (en proceso)
 function modificarOpciones() {
 
-	crearMenu(settings);
-	
+	crearMenu(divContenedor);	
 	var menuSettings = document.getElementById("menuInformacion");
+	
+	// por cada canción del array canciones hago un div y le aplico los métodos onclick, onmouseover y onmouseout
+	for (var i = 0; i < canciones.length; i++) {
+		var divCancion = document.createElement("div");
+		divCancion.setAttribute("id","cancion"+i);
+		divCancion.style.backgroundColor = "rgb(240,240,240)";
+		divCancion.style.border = "1px solid black";
+		divCancion.style.borderRadius = "3px";
+		divCancion.style.marginBottom = "5px";
+		divCancion.style.padding = "5px";
+		divCancion.style.width = "400px";
+		
+		// a cada div le pongo el nombre de la correspondiente canción
+		var nombreCancion = document.createElement("p");
+		nombreCancion.appendChild(document.createTextNode(canciones[i].getAttribute("name")));
+		
+		divCancion.appendChild(nombreCancion);
+		menuSettings.appendChild(divCancion);
+	}
+	
+	divsCanciones = new Array(canciones.length);
+	for (var i = 0; i < divsCanciones.length; i++) {
+		divsCanciones[i] = document.getElementById("cancion"+i);
+		agregarOnClick(divsCanciones[i],i);
+	}
+	
+	for (var i = 0; i < divsCanciones.length; i++) {		
+		
+		divsCanciones[i].onmouseover = function() {
+			this.style.backgroundColor = "rgb(162, 0, 0)";
+			this.style.color = "white";
+		}
+		divsCanciones[i].onmouseout = function() {
+			this.style.backgroundColor = "rgb(240,240,240)";
+			this.style.color = "black";
+		}
+	}
+	
 	
 	var imgMantenimiento = document.createElement("img");
 	imgMantenimiento.setAttribute("src","./images/mantenimiento.jpg");
-	menuSettings.appendChild(imgMantenimiento);
+	//menuSettings.appendChild(imgMantenimiento);
 	var textoMantenimiento = document.createElement("p");
 	textoMantenimiento.appendChild(document.createTextNode("Opción en proceso de construcción..."));
-	menuSettings.appendChild(textoMantenimiento);
+	//menuSettings.appendChild(textoMantenimiento);
 
+}
+
+// función que añade el método onclick a cada div contenido en el menú de settings
+function agregarOnClick(elem,orden) {
+	elem.onclick = function(){ seleccionarCancion(orden); };
+}
+
+function seleccionarCancion(idd) {
+
+	if(!cancionParaReproducir.paused && !cancionParaReproducir.ended){
+		cancionParaReproducir.pause();
+		cancionParaReproducir.currentTime = 0;
+		reproducir.value = 'Play';
+		clearInterval(bucle);
+		progreso.style.width = '0px';
+		cancionParaReproducir = canciones[idd];
+		cancionParaReproducir.play();
+		reproducir.value = 'Pause';
+		bucle = setInterval(estado, 1000);
+	}
+	else {
+		cancionParaReproducir = canciones[idd];
+		cancionParaReproducir.play();
+		reproducir.value = 'Pause';
+		bucle = setInterval(estado, 1000);
+	}
+	
 }
 
 // con esta función se cambia el índice para elegir la canción a reproducir, además de resetear la barra de estado.
 // este cambio lo hago de forma "circular", de la última canción se pasa a la primera y viceversa
 function modificarIndice() {
 	cancionParaReproducir.pause();
+	cancionParaReproducir.currentTime = 0;
 	reproducir.value = 'Play';
 	clearInterval(bucle);
 	switch(this.id) {
@@ -292,6 +407,7 @@ function modificarIndice() {
 function reproducirOPausar(){
 	if(!cancionParaReproducir.paused && !cancionParaReproducir.ended){
 		cancionParaReproducir.pause();
+		cancionParaReproducir.currentTime = 0;
 		reproducir.value = 'Play';
 		clearInterval(bucle);
 	}
@@ -312,6 +428,9 @@ function estado(){
 		progreso.style.width = '0px';
 		reproducir.innerHTML = 'Play';
 		clearInterval(bucle);
+		indiceCancion = indiceCancion + 1;
+		cancionParaReproducir = canciones[indiceCancion];
+		reproducirOPausar();
 	}
 }
 
@@ -419,6 +538,25 @@ function obtenerInformacion(posicion) {
 // cuando se ha hecho click anteriormente en una categoría del menú de navegación
 function crearMenu(elem) {
 
+	var contenedorGeneral = document.createElement("div");
+	contenedorGeneral.setAttribute("id","contenedorGeneral");
+	contenedorGeneral.style.backgroundColor = "rgb(204,204,204)";
+	var anchoContenedorGeneral = 538;
+	var altoContenedorGeneral = 352;
+	contenedorGeneral.style.width = anchoContenedorGeneral + "px";
+	contenedorGeneral.style.height = altoContenedorGeneral + "px";	
+	contenedorGeneral.style.borderRadius = "5px";
+	contenedorGeneral.style.border = "4px solid red";
+	contenedorGeneral.style.position = "absolute";
+	contenedorGeneral.style.top = elem.offsetTop - 200 + "px";
+	contenedorGeneral.style.left = document.body.offsetWidth/2 - anchoContenedorGeneral/2 + "px";
+	
+	var tituloSettings = document.createElement("p");
+	tituloSettings.appendChild(document.createTextNode("Seleccione una canción para reproducir:"));
+	tituloSettings.style.marginTop = "10px";
+	tituloSettings.style.marginLeft = "10px";
+	contenedorGeneral.appendChild(tituloSettings);
+
 	var menu = document.createElement("div");
 	menu.setAttribute("id","menuInformacion");
 	menu.style.backgroundColor = "rgb(204,204,204)";
@@ -426,14 +564,13 @@ function crearMenu(elem) {
 	var anchoMenu = 520;
 	menu.style.width = anchoMenu + "px";
 	menu.style.height = altoMenu + "px";
-	menu.style.top = elem.offsetTop - 240 + "px";
-	menu.style.left = document.body.offsetWidth/2 - anchoMenu/2 + "px";
+	menu.style.top = 45 + "px";
+	menu.style.left = 4 + "px";
 	menu.style.marginLeft = "auto";
 	menu.style.marginRight = "auto";
 	menu.style.position = "absolute";
-	menu.style.padding = "20px";
+	menu.style.paddingLeft = "8px";
 	menu.style.borderRadius = "5px";
-	menu.style.border = "4px solid red";
 	menu.style.overflow = "scroll";
 	
 	var botonSalir = document.createElement("button");
@@ -445,7 +582,7 @@ function crearMenu(elem) {
 	var anchoBoton = 40;
 	botonSalir.style.position = "absolute";
 	botonSalir.style.top = "1px";
-	botonSalir.style.left = (anchoMenu - anchoBoton/4)+"px";
+	botonSalir.style.left = (anchoContenedorGeneral - anchoBoton + 7) + "px";
 	botonSalir.style.padding = "5px";
 	botonSalir.style.margin = "5px";
 	botonSalir.style.borderRadius = "5px";
@@ -460,11 +597,12 @@ function crearMenu(elem) {
 		botonSalir.style.backgroundColor = "rgb(60, 60, 170)";
 	}
 	botonSalir.onclick = function() {
-		document.body.removeChild(document.getElementById("menuInformacion")); // borramos el menú
+		document.body.removeChild(document.getElementById("contenedorGeneral")); // borramos el menú
 	}
 	
-	menu.appendChild(botonSalir);
-	document.body.appendChild(menu); 
+	contenedorGeneral.appendChild(botonSalir);
+	contenedorGeneral.appendChild(menu);
+	document.body.appendChild(contenedorGeneral); 
 }
 
 

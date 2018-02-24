@@ -48,23 +48,62 @@ header {
 	display: flex;
 }
 
+#repYbusq {
+	width:88%;
+	position: relative;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#divBusqueda {
+	width: 28%;
+	min-width: 212px;
+	margin: 10px;
+	padding: 7px 5px 5px 5px;
+	background: #999999;
+	border: 1px solid #666666;
+	border-radius: 10px;
+	float: left;
+}
+
 #reproductor {
-	width: 60%;
-	min-width: 820px;
+	width: 57%;
+	min-width: 800px;
 	margin: 10px auto;
 	padding: 7px 5px 5px 5px;
 	background: #999999;
 	border: 1px solid #666666;
 	border-radius: 10px;
+	float: left;
 }
 
-#reproducir, #silenciar, #prev, #next, #settings {
+#reproducir, #silenciar, #prev, #next {
 	padding: 2px 10px;
 	width: 70px;
 	border: 1px solid #000000;
 	background: rgb(204, 204, 204);
 	font-weight: bold;
 	border-radius: 10px;
+}
+
+#settings {
+	padding: 2px 10px;
+	width: 120px;
+	border: 1px solid #000000;
+	background: rgb(204, 204, 204);
+	font-weight: bold;
+	border-radius: 10px;
+	margin-left: 24px;
+}
+
+#botonBusqueda {
+	padding: 2px 10px;
+	width: 100px;
+	border: 1px solid #000000;
+	background: rgb(204, 204, 204);
+	font-weight: bold;
+	border-radius: 10px;
+	margin-left: 4px;
 }
 
 #botones, #botonesOrden {
@@ -75,7 +114,7 @@ header {
 }
 #barra {
 	float: left;
-	width: 400px;
+	width: 300px;
 	height: 14px;
 	padding: 2px;
 	margin: 0px 5px;
@@ -119,10 +158,11 @@ td {
 
 li a:hover {
     background-color: rgb(162,0,0);
+	color: white;
 } 
 
 footer {
-	margin-top:1%;
+	margin-top:5px;
 	padding:1em;
 	text-align:center;
 	font-family:"courier";
