@@ -579,7 +579,7 @@ function actualizarBotones(tipo,indiceActual,numTotalPaginas,botonesCreados) {
 // función que se va a encargar de realizar la consulta a la API para obtener la información de cada elemento 
 // que hay en el div contenedor
 function obtenerInformacion(elemento,tipo,idDato) {
-	alert("pulsada pelicula " + tipo + " -- " + idDato);
+	
 	limpiarMenusInformacion();
 	crearMenu(document.getElementById(elemento));
 	
