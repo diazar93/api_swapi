@@ -22,92 +22,91 @@
 		<div id="navegacion">
 			<table>
 				<tr>
-					<td id="menu">Inicio</td>
-					<td id="catpeliculas">Películas</td>
-					<td id="catpersonajes">Personajes</td>
-					<td id="catplanetas">Planetas</td>
-					<td id="catespecies">Especies</td>
-					<td id="catnaves">Naves estelares</td>
-					<td id="catvehiculos">Vehículos</td>
+					<td id="menu">Home</td>
+					<td id="catpeliculas">Films</td>
+					<td id="catpersonajes">People</td>
+					<td id="catplanetas">Planets</td>
+					<td id="catespecies">Species</td>
+					<td id="catnaves">Starships</td>
+					<td id="catvehiculos">Vehicles</td>
 				</tr>
 			</table>
 		</div>
 		
-		<div id="repYbusq">
-			<div id="reproductor">
-				<audio id="medio1" name="Star Wars Main Theme">
-					<source src="./sounds/starwarsmaintheme.mp3">
-				</audio>
-				<audio id="medio2" name="Duel Of The Fates">
-					<source src="./sounds/duelofthefates.mp3">
-				</audio>
-				<audio id="medio3" name="Anakin vs Obi-Wan">
-					<source src="./sounds/anakinvsobiwan.mp3">
-				</audio>
-				<audio id="medio4" name="Love Pledge And The Arena">
-					<source src="./sounds/lovepledgeandthearena.mp3">
-				</audio>
-				<audio id="medio5" name="The Force Awakens">
-					<source src="./sounds/theforceawakens.mp3">
-				</audio>
-				<audio id="medio6" name="The Imperial March">
-					<source src="./sounds/theimperialmarch.mp3">
-				</audio>
-				<audio id="medio7" name="The Ways Of The Force">
-					<source src="./sounds/thewaysoftheforce.mp3">
-				</audio>
-				<audio id="medio8" name="Anakin's Betrayal">
-					<source src="./sounds/anakinsbetrayal.mp3">
-				</audio>
-				<audio id="medio9" name="Across The Stars">
-					<source src="./sounds/acrossthestars.mp3">
-				</audio>
-				<audio id="medio10" name="Battle Of The Heroes">
-					<source src="./sounds/battleoftheheroes.mp3">
-				</audio>
-				<audio id="medio11" name="Anakin's Dark Deeds">
-					<source src="./sounds/anakinsdarkdeeds.mp3">
-				</audio>
-				<audio id="medio12" name="Victory Celebration">
-					<source src="./sounds/victorycelebration.mp3">
-				</audio>
-				<audio id="medio13" name="The Rebel Fleet">
-					<source src="./sounds/therebelfleet.mp3">
-				</audio>
-				<audio id="medio14" name="Jedi Rocks">
-					<source src="./sounds/jedirocks.mp3">
-				</audio>
-				<audio id="medio15" name="Learn About The Force">
-					<source src="./sounds/learnabouttheforce.mp3">
-				</audio>
-				<audio id="medio16" name="Yoda And The Force">
-					<source src="./sounds/yodaandtheforce.mp3">
-				</audio>
-				
-				
-				
-				<div id="botones">
-					<input type="button" id="reproducir" value="Play">
-					<input type="button" id="silenciar" value="Mute">
-				</div>
-				<div id="barra">
-					<div id="progreso"></div>
-				</div>
-				<div id="botonesOrden">
-					<input type="button" id="prev" value="Prev">
-					<input type="button" id="next" value="Next">
-				</div>
-				<div id="botonSettings">
-					<input type="button" id="settings" value="Settings">
-				</div>
-				<div id="clear"></div>
-			</div>
+		<div id="reproductor">
+			<audio id="medio1" name="Star Wars Main Theme">
+				<source src="./sounds/starwarsmaintheme.mp3">
+			</audio>
+			<audio id="medio2" name="Duel Of The Fates">
+				<source src="./sounds/duelofthefates.mp3">
+			</audio>
+			<audio id="medio3" name="Anakin vs Obi-Wan">
+				<source src="./sounds/anakinvsobiwan.mp3">
+			</audio>
+			<audio id="medio4" name="Love Pledge And The Arena">
+				<source src="./sounds/lovepledgeandthearena.mp3">
+			</audio>
+			<audio id="medio5" name="The Force Awakens">
+				<source src="./sounds/theforceawakens.mp3">
+			</audio>
+			<audio id="medio6" name="The Imperial March">
+				<source src="./sounds/theimperialmarch.mp3">
+			</audio>
+			<audio id="medio7" name="The Ways Of The Force">
+				<source src="./sounds/thewaysoftheforce.mp3">
+			</audio>
+			<audio id="medio8" name="Anakin's Betrayal">
+				<source src="./sounds/anakinsbetrayal.mp3">
+			</audio>
+			<audio id="medio9" name="Across The Stars">
+				<source src="./sounds/acrossthestars.mp3">
+			</audio>
+			<audio id="medio10" name="Battle Of The Heroes">
+				<source src="./sounds/battleoftheheroes.mp3">
+			</audio>
+			<audio id="medio11" name="Anakin's Dark Deeds">
+				<source src="./sounds/anakinsdarkdeeds.mp3">
+			</audio>
+			<audio id="medio12" name="Victory Celebration">
+				<source src="./sounds/victorycelebration.mp3">
+			</audio>
+			<audio id="medio13" name="The Rebel Fleet">
+				<source src="./sounds/therebelfleet.mp3">
+			</audio>
+			<audio id="medio14" name="Jedi Rocks">
+				<source src="./sounds/jedirocks.mp3">
+			</audio>
+			<audio id="medio15" name="Learn About The Force">
+				<source src="./sounds/learnabouttheforce.mp3">
+			</audio>
+			<audio id="medio16" name="Yoda And The Force">
+				<source src="./sounds/yodaandtheforce.mp3">
+			</audio>
 			
-			<div id="divBusqueda">
-				<input type="search" name ="inputBusqueda" id="inputBusqueda" list="listaDatosAPI"><input type="button" id="botonBusqueda" value="Search"> 
-				<datalist id="listaDatosAPI"></datalist>
+			
+			
+			<div id="botones">
+				<input type="button" id="reproducir" value="Play">
+				<input type="button" id="silenciar" value="Mute">
 			</div>
-		</div>	
+			<div id="barra">
+				<div id="progreso"></div>
+			</div>
+			<div id="botonesOrden">
+				<input type="button" id="prev" value="Prev">
+				<input type="button" id="next" value="Next">
+			</div>
+			<div id="botonSettings">
+				<input type="button" id="settings" value="Settings">
+			</div>
+			<div id="clear"></div>
+		</div>
+		
+		<div id="divBusqueda">
+			<input type="search" name ="inputBusqueda" id="inputBusqueda" list="listaDatosAPI"><input type="button" id="botonBusqueda" value="Search"> 
+			<datalist id="listaDatosAPI"></datalist>
+		</div>
+		
 			
 		<div id="contenedor">
 			

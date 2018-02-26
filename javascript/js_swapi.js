@@ -66,7 +66,7 @@ window.onload = function() {
 	inputBusqueda.onkeypress = comprobarTecla;
 	
 	botonBusqueda = document.getElementById("botonBusqueda");
-	botonBusqueda.onclick = function(){ buscar(inputBusqueda.textContent); };
+	botonBusqueda.onclick = function(){ buscar(inputBusqueda.value,0,1); };
 	botonBusqueda.onmouseover = function() {
 		botonBusqueda.style.backgroundColor = "rgb(162, 0, 0)";
 		botonBusqueda.style.color = "white";
@@ -80,14 +80,122 @@ window.onload = function() {
 // función que comprueba si se pulsa la tecla enter y, si es asi, realiza la función de buscar
 function comprobarTecla(evObject) {	
 	if (evObject.which == 13) {
-		buscar(inputBusqueda.textContent);
+		buscar(inputBusqueda.value,0,1);
 	}	
 }
 
 // función que realiza la búsqueda en toda la API del elemento escrito en el recuadro de búsqueda
-function buscar(cadena) {
+function buscar(cadenaABuscar,indiceTipos,contador) {
+
 	inputBusqueda.value = "";
-	crearMenu(divContenedor);
+	crearMenuCargando(document.getElementById("divOculto")); // se crea el aviso de que se están cargando los resultados
+	
+	var menuCargando = document.getElementById("menuCargando");
+	var parrafoCargando = document.createElement("p");
+	parrafoCargando.appendChild(document.createTextNode("Realizando la búsqueda..."));
+	parrafoCargando.style.textAlign = "center";
+	menuCargando.appendChild(parrafoCargando);
+	
+	// Obtener la instancia del objeto XMLHttpRequest
+	if(window.XMLHttpRequest) {
+		peticion_http = new XMLHttpRequest();
+	}
+	else if(window.ActiveXObject) {
+		peticion_http = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	// Preparar la funcion de respuesta
+	peticion_http.onreadystatechange = muestraContenido;
+	
+	// Realizar peticion HTTP
+	var tipos = ["films","people","planets","species","starships","vehicles"];
+	tipoEvaluado = tipos[indiceTipos];
+	peticion_http.open('GET',"https://swapi.co/api/"+tipoEvaluado+"/"+contador, true);	
+	peticion_http.send(null);
+	
+	function muestraContenido() {
+		if(peticion_http.readyState == 4) {
+			if(peticion_http.status == 200) {
+				
+				// como se ha completado correctamente la descarga de los datos elimino el aviso de cargando
+				limpiarMenuCargando();
+				
+				var archivoJSON = JSON.parse(peticion_http.responseText);
+				
+				if (archivoJSON.title) {
+					if (archivoJSON.title == cadenaABuscar) {
+						crearMenu(divContenedor);
+						mostrarInformacionPelicula(archivoJSON);
+					}
+					else {
+						actualizarParametrosBusqueda(cadenaABuscar,indiceTipos,contador,tipoEvaluado);
+					}
+				}
+				
+				if (archivoJSON.name) {
+					if (archivoJSON.name == cadenaABuscar) {
+						crearMenu(divContenedor);				
+						switch (tipoEvaluado) {
+							case "people":
+								mostrarInformacionPersonaje(archivoJSON);
+								break;
+							case "planets":
+								mostrarInformacionPlaneta(archivoJSON);
+								break;
+							case "species":
+								mostrarInformacionEspecie(archivoJSON);
+								break;
+							case "starships":
+								mostrarInformacionNave(archivoJSON);
+								break;
+							case "films":
+								mostrarInformacionVehiculo(archivoJSON);
+								break;
+						}
+					}
+					else {
+						actualizarParametrosBusqueda(cadenaABuscar,indiceTipos,contador,tipoEvaluado);
+					}
+				}
+				
+			}
+			else {
+				actualizarParametrosBusqueda(cadenaABuscar,indiceTipos,contador,tipoEvaluado);
+			}
+		}
+	}
+}
+
+function actualizarParametrosBusqueda(cadenaABuscar,indiceTipos,contador,tipoEvaluado) {
+
+	switch (tipoEvaluado) {
+		case "films":
+			topeContador = 7;
+			break;
+		case "people":
+			topeContador = 87;
+			break;
+		case "planets":
+			topeContador = 61;
+			break;
+		case "species":
+			topeContador = 37;
+			break;
+		case "starships":
+			topeContador = 37;
+			break;
+		case "films":
+			topeContador = 39;
+			break;
+	}
+
+	if (contador < topeContador) {
+		contador = contador + 1;
+	}
+	else {
+		indiceTipos = indiceTipos + 1;
+		contador = 1;
+	}
+	buscar(cadenaABuscar,indiceTipos,contador);
 }
 
 // función para cambiar el color de fondo de los elementos del menú de navegación comforme pasas el ratón por encima de ellos
@@ -471,10 +579,29 @@ function actualizarBotones(tipo,indiceActual,numTotalPaginas,botonesCreados) {
 // función que se va a encargar de realizar la consulta a la API para obtener la información de cada elemento 
 // que hay en el div contenedor
 function obtenerInformacion(elemento,tipo,idDato) {
-
+	alert("pulsada pelicula " + tipo + " -- " + idDato);
 	limpiarMenusInformacion();
 	crearMenu(document.getElementById(elemento));
-	descargaJSon(tipo,idDato);
+	
+	// si se va a obtener informacion de una pelicula hago el siguiente arreglo
+	// ya que las peliculas están alojadas en una url con un código identificador
+	// que no se corresponde con su número de episodio
+	if (tipo == "films") {
+		var listadoPeliculas = [0,4,5,6,1,2,3,7];	
+		var res;
+		encontrado = false;
+		
+		for (var i = 0; i < listadoPeliculas.length && !encontrado; i++) {	
+			if (listadoPeliculas[i] == idDato) {
+				res = i;
+				encontrado = true;
+			}
+		}
+		descargaJSon(tipo,res);
+	}
+	else {
+		descargaJSon(tipo,idDato);
+	}
 }
 
 // para evitar que se puedan superponer varios menús se borra el que hay anteriormente si se hace click en otro elemento
