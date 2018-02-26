@@ -61,7 +61,7 @@ window.onload = function() {
 	// cargo el cuadro de búsqueda
 	inputBusqueda = document.getElementById("inputBusqueda");
 	inputBusqueda.setAttribute("placeholder","Dato a buscar...");
-	inputBusqueda.style.width = "200px";
+	inputBusqueda.style.width = "180px";
 	inputBusqueda.style.padding = "1px";
 	inputBusqueda.onkeypress = comprobarTecla;
 	

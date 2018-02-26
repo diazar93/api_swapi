@@ -49,8 +49,8 @@ header {
 }
 
 #divBusqueda {
-	width: 30%;
-	min-width: 30%;
+	width: 33%;
+	min-width: 33%;
 	margin: 10px;
 	padding: 7px 5px 5px 5px;
 	background: #999999;
@@ -97,8 +97,7 @@ header {
 	border: 1px solid #000000;
 	background: rgb(204, 204, 204);
 	font-weight: bold;
-	border-radius: 10px;
-	margin-left: 25px;
+	border-radius: 20px;
 }
 
 #botones, #botonesOrden {
