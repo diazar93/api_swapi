@@ -103,13 +103,19 @@
 		</div>
 		
 		<div id="divBusqueda">
-			<input type="search" name ="inputBusqueda" id="inputBusqueda" list="listaDatosAPI"><input type="button" id="botonBusqueda" value="Search"> 
+			<input type="search" name ="inputBusqueda" id="inputBusqueda" list="listaDatosAPI">
+			<span id="tooltip">?
+				<span id="tooltiptext">
+					La búsqueda de información se realiza comparando el contenido de la caja de texto
+					con el campo título (en caso de las películas) o con el campo nombre (en caso del 
+					resto de categorías)
+				</span>
+			</span>
+			<input type="button" id="botonBusqueda" value="Search"> 
 			<datalist id="listaDatosAPI"></datalist>
 		</div>
-		
 			
 		<div id="contenedor">
-			
 			
 			<p>Bienvenido a la página principal de SWAPI, la página web oficial acerca del universo de Star Wars cuyo 
 				contenido se obtiene directamente de la API pública <a href="https://swapi.co/">https://swapi.co</a>. 
@@ -121,7 +127,10 @@
 		</div>
 		
 		<footer>
-			<b>COPYRIGHT © Alberto Díaz Arenas  | HTML5 | CSS3</b>
+			<b>COPYRIGHT © Alberto Díaz Arenas</b> <br/>
+			<b>I.E.S Virgen de la Paloma -></b>
+			<b>Desarrollo de Aplicaciones Multiplataforma -></b>
+			<b>Módulo de Desarrollo de Interfaces</b>
 		</footer>
 		
 	</body>

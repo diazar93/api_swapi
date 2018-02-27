@@ -10,11 +10,7 @@ Grado: Desarrollo de Aplicaciones Multiplataforma
 Instituto: IES Virgen de la Paloma
 */
 
-body {
-	font-family:"century gothic";
-	background-color:#888888;
-}
-
+/* CSS HEADER */
 #imgheader {
 	visibility: hidden;
 }
@@ -35,6 +31,13 @@ header {
 	margin-bottom: 1%;
 }
 
+/* CSS BODY */
+body {
+	font-family:"century gothic";
+	background-color:#888888;
+}
+
+/* CSS PANEL DE NAVEGACIÓN */
 #navegacion {
 	width: 88%;
 	min-width: 850px;
@@ -48,18 +51,25 @@ header {
 	display: flex;
 }
 
-#divBusqueda {
-	width: 310px;
-	min-width: 300px;
-	margin: 10px;
-	padding: 7px 5px 5px 5px;
-	background: #999999;
-	border: 1px solid #666666;
-	border-radius: 10px;
-	margin-left: auto;
-	margin-right: auto;
+table {
+	color: white;
+	text-align: center;
+	border-collapse: collapse;
 }
 
+td {
+	background-color: rgb(51, 51, 51);
+	width: 250px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+li a:hover {
+    background-color: rgb(162,0,0);
+	color: white;
+} 
+
+/* CSS REPRODUCTOR DE MÚSICA */
 #reproductor {
 	width: 57%;
 	min-width: 800px;
@@ -91,16 +101,6 @@ header {
 	margin-left: 24px;
 }
 
-#botonBusqueda {
-	padding: 2px 10px;
-	width: 80px;
-	border: 1px solid #000000;
-	background: rgb(204, 204, 204);
-	font-weight: bold;
-	border-radius: 10px;
-	margin-left: 10px;
-}
-
 #botones, #botonesOrden {
 	float: left;
 	width: 150px;
@@ -127,8 +127,73 @@ header {
 	clear: both;
 }
 
+/* CSS BUSCADOR */
+#divBusqueda {
+	width: 350px;
+	min-width: 300px;
+	margin: 10px;
+	padding: 7px 5px 5px 5px;
+	background: #999999;
+	border: 1px solid #666666;
+	border-radius: 10px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#botonBusqueda {
+	padding: 2px 10px;
+	width: 80px;
+	border: 1px solid #000000;
+	background: rgb(204, 204, 204);
+	font-weight: bold;
+	border-radius: 10px;
+	margin-left: 28px;
+}
+
+#tooltip {
+    position: relative;
+	width: 20px;
+    display: inline-block;
+    border: 1px solid black;
+	border-radius: 10px;
+	font-family:"courier";
+	text-align: center;
+	background-color: rgb(255,255,90);
+}
+
+#tooltip #tooltiptext {
+    visibility: hidden;
+    width: 450px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    top: 150%;
+    left: 50%;
+    margin-left: -225px;
+}
+
+#tooltip #tooltiptext::after {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent black transparent;
+}
+
+#tooltip:hover #tooltiptext {
+    visibility: visible;
+}
+
+/* CSS CONTENEDOR */
 #contenedor {
-	overflow:hidden;
+	overflow: hidden;
 	width: 88%;
 	min-width: 850px;
 	margin-top: 1%;
@@ -136,34 +201,17 @@ header {
 	margin-right: auto;
 	padding: 30px 20px;
 	background-color: rgb(204,204,204);
-	border-radius:15px;
+	border-radius: 15px;
 }
 
-table {
-	color: white;
-	text-align: center;
-	border-collapse: collapse;
-}
-
-td {
-	background-color: rgb(51, 51, 51);
-	width: 250px;
-	padding-top: 5px;
-	padding-bottom: 5px;
-}
-
-li a:hover {
-    background-color: rgb(162,0,0);
-	color: white;
-} 
-
+/* CSS FOOTER */
 footer {
-	margin-top:5px;
-	padding:1em;
-	text-align:center;
-	font-family:"courier";
+	margin-top: 5px;
+	padding: 1em;
+	text-align: center;
+	font-family: "courier";
 }
 
 #copyright {
-	color:gray;
+	color: gray;
 }

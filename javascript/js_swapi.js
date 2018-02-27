@@ -66,7 +66,7 @@ window.onload = function() {
 	inputBusqueda.onkeypress = comprobarTecla;
 	
 	botonBusqueda = document.getElementById("botonBusqueda");
-	botonBusqueda.onclick = function(){ buscar(inputBusqueda.value,0,1); };
+	botonBusqueda.onclick = function(){ buscar(inputBusqueda.value,0,1,true); };
 	botonBusqueda.onmouseover = function() {
 		botonBusqueda.style.backgroundColor = "rgb(162, 0, 0)";
 		botonBusqueda.style.color = "white";
@@ -80,21 +80,17 @@ window.onload = function() {
 // función que comprueba si se pulsa la tecla enter y, si es asi, realiza la función de buscar
 function comprobarTecla(evObject) {	
 	if (evObject.which == 13) {
-		buscar(inputBusqueda.value,0,1);
+		buscar(inputBusqueda.value,0,1,true);
 	}	
 }
 
 // función que realiza la búsqueda en toda la API del elemento escrito en el recuadro de búsqueda
-function buscar(cadenaABuscar,indiceTipos,contador) {
+function buscar(cadenaABuscar,indiceTipos,contador,primeraBusqueda) {
 
 	inputBusqueda.value = "";
-	crearMenuCargando(document.getElementById("divOculto")); // se crea el aviso de que se están cargando los resultados
-	
-	var menuCargando = document.getElementById("menuCargando");
-	var parrafoCargando = document.createElement("p");
-	parrafoCargando.appendChild(document.createTextNode("Realizando la búsqueda..."));
-	parrafoCargando.style.textAlign = "center";
-	menuCargando.appendChild(parrafoCargando);
+	if (primeraBusqueda) { // solo si se llama a buscar por primera vez genero el menú de cargando, ya que buscar es una función recurrente
+		crearMenuCargando(document.getElementById("divOculto"),true); // se crea el aviso de que se están cargando los resultados
+	}
 	
 	// Obtener la instancia del objeto XMLHttpRequest
 	if(window.XMLHttpRequest) {
@@ -116,13 +112,12 @@ function buscar(cadenaABuscar,indiceTipos,contador) {
 		if(peticion_http.readyState == 4) {
 			if(peticion_http.status == 200) {
 				
-				// como se ha completado correctamente la descarga de los datos elimino el aviso de cargando
-				limpiarMenuCargando();
-				
 				var archivoJSON = JSON.parse(peticion_http.responseText);
 				
 				if (archivoJSON.title) {
 					if (archivoJSON.title == cadenaABuscar) {
+						// como se ha completado correctamente la descarga de los datos elimino el aviso de cargando
+						limpiarMenuCargando();
 						crearMenu(divContenedor);
 						mostrarInformacionPelicula(archivoJSON);
 					}
@@ -133,6 +128,8 @@ function buscar(cadenaABuscar,indiceTipos,contador) {
 				
 				if (archivoJSON.name) {
 					if (archivoJSON.name == cadenaABuscar) {
+						// como se ha completado correctamente la descarga de los datos elimino el aviso de cargando
+						limpiarMenuCargando();
 						crearMenu(divContenedor);				
 						switch (tipoEvaluado) {
 							case "people":
@@ -195,7 +192,9 @@ function actualizarParametrosBusqueda(cadenaABuscar,indiceTipos,contador,tipoEva
 		indiceTipos = indiceTipos + 1;
 		contador = 1;
 	}
-	buscar(cadenaABuscar,indiceTipos,contador);
+	buscar(cadenaABuscar,indiceTipos,contador,false); 
+	// uso el false para indicar que ya NO es una primera búsqueda y así evitar 
+	//la formación de tantos menús de cargando como elementos haya evaluado en la búsqueda
 }
 
 // función para cambiar el color de fondo de los elementos del menú de navegación comforme pasas el ratón por encima de ellos
@@ -275,13 +274,7 @@ function limpiarContenedor() {
 // de forma paginada llamando a la función correspondiente
 function navegarA(tipo,idPag,indiceActual,esAvance,existenBotones) {
 
-	crearMenuCargando(document.getElementById("divOculto")); // se crea el aviso de que se están cargando los resultados
-	
-	var menuCargando = document.getElementById("menuCargando");
-	var parrafoCargando = document.createElement("p");
-	parrafoCargando.appendChild(document.createTextNode("Cargando..."));
-	parrafoCargando.style.textAlign = "center";
-	menuCargando.appendChild(parrafoCargando);	
+	crearMenuCargando(document.getElementById("divOculto"),false); // se crea el aviso de que se están cargando los resultados	
 
 	// Obtener la instancia del objeto XMLHttpRequest
 	if(window.XMLHttpRequest) {
@@ -322,13 +315,13 @@ function navegarA(tipo,idPag,indiceActual,esAvance,existenBotones) {
 }
 
 // función que crea el menú con el aviso de que se está cargando la página
-function crearMenuCargando(elem) {
+function crearMenuCargando(elem,esBusqueda) {
 
 	var menu = document.createElement("div");
 	menu.setAttribute("id","menuCargando");
 	menu.style.backgroundColor = "rgb(204,204,204)";
-	var altoMenu = 32;
-	var anchoMenu = 180;
+	var altoMenu = 160;
+	var anchoMenu = 200;
 	menu.style.width = anchoMenu + "px";
 	menu.style.height = altoMenu + "px";
 	menu.style.top = elem.offsetTop + "px";
@@ -339,6 +332,23 @@ function crearMenuCargando(elem) {
 	menu.style.padding = "20px";
 	menu.style.borderRadius = "5px";
 	menu.style.border = "4px solid red";
+	
+	var parrafoCargando = document.createElement("p");
+	if (esBusqueda) {
+		parrafoCargando.appendChild(document.createTextNode("Realizando la búsqueda..."));
+	}
+	else {
+		parrafoCargando.appendChild(document.createTextNode("Cargando..."));
+	}
+	parrafoCargando.style.textAlign = "center";
+	menu.appendChild(parrafoCargando);
+	
+	var gifCargando = new Image();
+	gifCargando.src = "./images/cargando.gif";
+	gifCargando.style.position = "absolute";
+	gifCargando.style.marginLeft = "auto";
+	gifCargando.style.marginRight = "auto";
+	menu.appendChild(gifCargando);
 	
 	document.body.appendChild(menu); 
 }
@@ -688,13 +698,7 @@ function crearMenu(elem,opcionSettings) {
 
 function descargaJSon(tipo,idDato) {
 
-	crearMenuCargando(document.getElementById("divOculto")); // se crea el aviso de que se están cargando los resultados
-	
-	var menuCargando = document.getElementById("menuCargando");
-	var parrafoCargando = document.createElement("p");
-	parrafoCargando.appendChild(document.createTextNode("Cargando..."));
-	parrafoCargando.style.textAlign = "center";
-	menuCargando.appendChild(parrafoCargando);	
+	crearMenuCargando(document.getElementById("divOculto"),false); // se crea el aviso de que se están cargando los resultados	
 
 	// Obtener la instancia del objeto XMLHttpRequest
 	if(window.XMLHttpRequest) {
