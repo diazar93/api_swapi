@@ -663,7 +663,7 @@ function crearMenu(elem,opcionSettings) {
 	var anchoBoton = 40;
 	botonSalir.style.position = "absolute";
 	botonSalir.style.top = "1px";
-	botonSalir.style.left = (anchoContenedorGeneral - anchoBoton + 7) + "px";
+	botonSalir.style.left = (anchoContenedorGeneral - anchoBoton - 10 ) + "px";
 	botonSalir.style.padding = "5px";
 	botonSalir.style.margin = "5px";
 	botonSalir.style.borderRadius = "5px";
