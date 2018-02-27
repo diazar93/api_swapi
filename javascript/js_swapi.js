@@ -617,7 +617,7 @@ function obtenerInformacion(elemento,tipo,idDato) {
 // para evitar que se puedan superponer varios menús se borra el que hay anteriormente si se hace click en otro elemento
 // que a su vez genere otro menú
 function limpiarMenusInformacion() {
-	var aux = document.getElementById("menuInformacion");
+	var aux = document.getElementById("contenedorGeneral");
 	if (aux) {
 		document.body.removeChild(aux); // borramos el menú
 	}
@@ -735,7 +735,7 @@ function descargaJSon(tipo,idDato) {
 					case "starships":
 						mostrarInformacionNave(JSON.parse(peticion_http.responseText));
 						break;
-					case "films":
+					case "vehicles":
 						mostrarInformacionVehiculo(JSON.parse(peticion_http.responseText));
 						break;
 				}
@@ -991,7 +991,7 @@ function mostrarInformacionNave(fichero) {
 
 // función que muestra en el div de información la información del vehículo seleccionado
 function mostrarInformacionVehiculo(fichero) {
-	var contenedorGeneral = document.getElementById("contenedorGeneral");
+
 	var menu = document.getElementById("menuInformacion");
 			
 	var codVehiculo = obtenerNumeroElemento(fichero.url);
@@ -1008,7 +1008,7 @@ function mostrarInformacionVehiculo(fichero) {
 	divDatos.style.top = ( imagenVehiculo.height + 5 ) + "px";
 	
 	var nombre = document.createElement("p");			
-	nombre.appendChild(document.createTextNode("Name: " + fichero.name));
+	nombre.appendChild(document.createTextNode("Name: " + fichero.name)); 
 	var model = document.createElement("p");
 	model.appendChild(document.createTextNode("Model: " + fichero.model));
 	var manufacturer = document.createElement("p");
