@@ -658,7 +658,7 @@ function crearMenu(elem,opcionSettings) {
 	botonSalir.setAttribute("type","button");
 	botonSalir.setAttribute("name","botonSalir");
 	botonSalir.setAttribute("id","botonSalir");
-	botonSalir.appendChild(document.createTextNode("X"));
+	botonSalir.appendChild(document.createTextNode("Close"));
 	var altoBoton = 40;
 	var anchoBoton = 40;
 	botonSalir.style.position = "absolute";
