@@ -87,76 +87,79 @@ function comprobarTecla(evObject) {
 // función que realiza la búsqueda en toda la API del elemento escrito en el recuadro de búsqueda
 function buscar(cadenaABuscar,indiceTipos,contador,primeraBusqueda) {
 
-	inputBusqueda.value = "";
-	if (primeraBusqueda) { // solo si se llama a buscar por primera vez genero el menú de cargando, ya que buscar es una función recurrente
-		crearMenuCargando(document.getElementById("divOculto"),true); // se crea el aviso de que se están cargando los resultados
-	}
-	
-	// Obtener la instancia del objeto XMLHttpRequest
-	if(window.XMLHttpRequest) {
-		peticion_http = new XMLHttpRequest();
-	}
-	else if(window.ActiveXObject) {
-		peticion_http = new ActiveXObject("Microsoft.XMLHTTP");
-	}
-	// Preparar la funcion de respuesta
-	peticion_http.onreadystatechange = muestraContenido;
-	
-	// Realizar peticion HTTP
-	var tipos = ["films","people","planets","species","starships","vehicles"];
-	tipoEvaluado = tipos[indiceTipos];
-	peticion_http.open('GET',"https://swapi.co/api/"+tipoEvaluado+"/"+contador, true);	
-	peticion_http.send(null);
-	
-	function muestraContenido() {
-		if(peticion_http.readyState == 4) {
-			if(peticion_http.status == 200) {
-				
-				var archivoJSON = JSON.parse(peticion_http.responseText);
-				
-				if (archivoJSON.title) {
-					if (archivoJSON.title == cadenaABuscar) {
-						// como se ha completado correctamente la descarga de los datos elimino el aviso de cargando
-						limpiarMenuCargando();
-						crearMenu(divContenedor);
-						mostrarInformacionPelicula(archivoJSON);
-					}
-					else {
-						actualizarParametrosBusqueda(cadenaABuscar,indiceTipos,contador,tipoEvaluado);
-					}
-				}
-				
-				if (archivoJSON.name) {
-					if (archivoJSON.name == cadenaABuscar) {
-						// como se ha completado correctamente la descarga de los datos elimino el aviso de cargando
-						limpiarMenuCargando();
-						crearMenu(divContenedor);				
-						switch (tipoEvaluado) {
-							case "people":
-								mostrarInformacionPersonaje(archivoJSON);
-								break;
-							case "planets":
-								mostrarInformacionPlaneta(archivoJSON);
-								break;
-							case "species":
-								mostrarInformacionEspecie(archivoJSON);
-								break;
-							case "starships":
-								mostrarInformacionNave(archivoJSON);
-								break;
-							case "films":
-								mostrarInformacionVehiculo(archivoJSON);
-								break;
+	if (cadenaABuscar != "") {
+
+		inputBusqueda.value = "";
+		if (primeraBusqueda) { // solo si se llama a buscar por primera vez genero el menú de cargando, ya que buscar es una función recurrente
+			crearMenuCargando(document.getElementById("divOculto"),true); // se crea el aviso de que se están cargando los resultados
+		}
+		
+		// Obtener la instancia del objeto XMLHttpRequest
+		if(window.XMLHttpRequest) {
+			peticion_http = new XMLHttpRequest();
+		}
+		else if(window.ActiveXObject) {
+			peticion_http = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		// Preparar la funcion de respuesta
+		peticion_http.onreadystatechange = muestraContenido;
+		
+		// Realizar peticion HTTP
+		var tipos = ["films","people","planets","species","starships","vehicles"];
+		tipoEvaluado = tipos[indiceTipos];
+		peticion_http.open('GET',"https://swapi.co/api/"+tipoEvaluado+"/"+contador+"/", true);	
+		peticion_http.send(null);
+		
+		function muestraContenido() {
+			if(peticion_http.readyState == 4) {
+				if(peticion_http.status == 200) {
+					
+					var archivoJSON = JSON.parse(peticion_http.responseText);
+					
+					if (archivoJSON.title) {
+						if (archivoJSON.title == cadenaABuscar) {
+							// como se ha completado correctamente la descarga de los datos elimino el aviso de cargando
+							limpiarMenuCargando();
+							crearMenu(divContenedor);
+							mostrarInformacionPelicula(archivoJSON);
+						}
+						else {
+							actualizarParametrosBusqueda(cadenaABuscar,indiceTipos,contador,tipoEvaluado);
 						}
 					}
-					else {
-						actualizarParametrosBusqueda(cadenaABuscar,indiceTipos,contador,tipoEvaluado);
+					
+					if (archivoJSON.name) {
+						if (archivoJSON.name == cadenaABuscar) {
+							// como se ha completado correctamente la descarga de los datos elimino el aviso de cargando
+							limpiarMenuCargando();
+							crearMenu(divContenedor);				
+							switch (tipoEvaluado) {
+								case "people":
+									mostrarInformacionPersonaje(archivoJSON);
+									break;
+								case "planets":
+									mostrarInformacionPlaneta(archivoJSON);
+									break;
+								case "species":
+									mostrarInformacionEspecie(archivoJSON);
+									break;
+								case "starships":
+									mostrarInformacionNave(archivoJSON);
+									break;
+								case "vehicles":
+									mostrarInformacionVehiculo(archivoJSON);
+									break;
+							}
+						}
+						else {
+							actualizarParametrosBusqueda(cadenaABuscar,indiceTipos,contador,tipoEvaluado);
+						}
 					}
+					
 				}
-				
-			}
-			else {
-				actualizarParametrosBusqueda(cadenaABuscar,indiceTipos,contador,tipoEvaluado);
+				else {
+					actualizarParametrosBusqueda(cadenaABuscar,indiceTipos,contador,tipoEvaluado);
+				}
 			}
 		}
 	}
@@ -169,7 +172,7 @@ function actualizarParametrosBusqueda(cadenaABuscar,indiceTipos,contador,tipoEva
 			topeContador = 7;
 			break;
 		case "people":
-			topeContador = 87;
+			topeContador = 88;
 			break;
 		case "planets":
 			topeContador = 61;
@@ -178,23 +181,69 @@ function actualizarParametrosBusqueda(cadenaABuscar,indiceTipos,contador,tipoEva
 			topeContador = 37;
 			break;
 		case "starships":
-			topeContador = 37;
+			topeContador = 77;
 			break;
-		case "films":
-			topeContador = 39;
+		case "vehicles":
+			topeContador = 76;
 			break;
 	}
 
 	if (contador < topeContador) {
 		contador = contador + 1;
+		buscar(cadenaABuscar,indiceTipos,contador,false); 
 	}
 	else {
-		indiceTipos = indiceTipos + 1;
-		contador = 1;
+		if (tipoEvaluado != "vehicles") { // sólo se da este caso si no llegado al útimo elemento de la categoría vehículos
+			indiceTipos = indiceTipos + 1;
+			contador = 1;
+		
+			buscar(cadenaABuscar,indiceTipos,contador,false); 
+		}
+		else { // si hemos llegado al último elemento de la categoría vehículos mostramos un mensaje de búsqueda fallida
+			limpiarMenuCargando();
+			crearMenuBusquedaFallida(divContenedor,cadenaABuscar);
+			setTimeout(limpiarMenuBusquedaFallida,3000);
+		}
 	}
-	buscar(cadenaABuscar,indiceTipos,contador,false); 
+	
+	
 	// uso el false para indicar que ya NO es una primera búsqueda y así evitar 
 	//la formación de tantos menús de cargando como elementos haya evaluado en la búsqueda
+}
+
+// función que borra el menú de búsqueda fallida 
+function limpiarMenuBusquedaFallida() {
+	var aux = document.getElementById("menuBusquedaFallida");
+	if (aux) {
+		document.body.removeChild(aux); 
+	}
+}
+
+// función que crea el menú con el aviso de que se no se ha encontrado un elemento
+function crearMenuBusquedaFallida(elem,cadenaABuscar) {
+
+	var menu = document.createElement("div");
+	menu.setAttribute("id","menuBusquedaFallida");
+	menu.style.backgroundColor = "rgb(204,204,204)";
+	var altoMenu = 160;
+	var anchoMenu = 200;
+	menu.style.width = anchoMenu + "px";
+	menu.style.height = altoMenu + "px";
+	menu.style.top = elem.offsetTop + "px";
+	menu.style.left = document.body.offsetWidth/2 - anchoMenu/2 + "px";
+	menu.style.marginLeft = "auto";
+	menu.style.marginRight = "auto";
+	menu.style.position = "absolute";
+	menu.style.padding = "20px";
+	menu.style.borderRadius = "5px";
+	menu.style.border = "4px solid red";
+	
+	var parrafoCargando = document.createElement("p");
+	parrafoCargando.appendChild(document.createTextNode("Lo sentimos, no se ha encontrado ningún archivo que coincida con '"+cadenaABuscar+"'"));
+	parrafoCargando.style.textAlign = "center";
+	menu.appendChild(parrafoCargando);
+	
+	document.body.appendChild(menu); 
 }
 
 // función para cambiar el color de fondo de los elementos del menú de navegación comforme pasas el ratón por encima de ellos
