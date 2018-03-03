@@ -14,7 +14,7 @@ window.onload = function() {
 	divOculto.style.backgroundColor= "green";
 	divOculto.style.width = "50px";
 	divOculto.style.position = "fixed";
-	divOculto.style.top = "400px";
+	divOculto.style.top = divOculto.scrollTop + 450 + "px";
 	divOculto.style.left = document.body.offsetWidth/2 - 25 + "px";
 	divOculto.style.marginLeft = "auto";
 	divOculto.style.marginRight = "auto";
@@ -87,7 +87,7 @@ function comprobarTecla(evObject) {
 // función que realiza la búsqueda en toda la API del elemento escrito en el recuadro de búsqueda
 function buscar(cadenaABuscar,indiceTipos,contador,primeraBusqueda) {
 
-	if (cadenaABuscar != "") {
+	if (cadenaABuscar != "") { // solo se hace una bsqueda si hay algo en el recuadro de búsqueda
 
 		inputBusqueda.value = "";
 		if (primeraBusqueda) { // solo si se llama a buscar por primera vez genero el menú de cargando, ya que buscar es una función recurrente
@@ -794,6 +794,15 @@ function descargaJSon(tipo,idDato) {
 	}
 }
 
+// ya que el modelo a seguir para ver la información de un elemento tiene la estructura de:
+//	IMAGEN ELEMENTO
+// 	DATOS ELEMENTO
+// pues esta función mostrarConTabulacion alinea los datos con la imagen, para que se vea todo al mismo nivel
+function mostrarConTabulacion(menu,elem) {
+	elem.style.position = "relative";	
+	elem.style.left = ( menu.offsetWidth/2 - 175 ) + "px";
+}
+
 // función que muestra en el div de información la información de la película seleccionada
 function mostrarInformacionPelicula(fichero) {
 	var menu = document.getElementById("menuInformacion");
@@ -810,21 +819,35 @@ function mostrarInformacionPelicula(fichero) {
 	var divDatos = document.createElement("div");
 	divDatos.style.position = "relative";	
 	divDatos.style.top = ( imagenPelicula.height + 5 ) + "px";
+	divDatos.style.width = "350px";
 	
 	var titulo = document.createElement("p");			
 	titulo.appendChild(document.createTextNode("Episodio " + codPelicula + ": " + fichero.title));
+	mostrarConTabulacion(menu,titulo);
+	
 	var director = document.createElement("p");
 	director.appendChild(document.createTextNode("Director: " + fichero.director));
+	mostrarConTabulacion(menu,director);
+	
 	var producer = document.createElement("p");
 	producer.appendChild(document.createTextNode("Producer: " + fichero.producer));
+	mostrarConTabulacion(menu,producer);
+	
 	var releaseDate = document.createElement("p");
 	releaseDate.appendChild(document.createTextNode("Release Date: " + fichero.release_date));
+	mostrarConTabulacion(menu,releaseDate);
+	
 	var espacio = document.createElement("p");
 	espacio.appendChild(document.createTextNode("-------------------------------------------"));
+	mostrarConTabulacion(menu,espacio);
+	
 	var opening = document.createElement("p");
 	opening.appendChild(document.createTextNode("Opening: "));
+	mostrarConTabulacion(menu,opening);
+	
 	var textoOpening = document.createElement("p");
 	textoOpening.appendChild(document.createTextNode(fichero.opening_crawl));
+	mostrarConTabulacion(menu,textoOpening);
 	
 	divDatos.appendChild(titulo);
 	divDatos.appendChild(director);
@@ -856,20 +879,35 @@ function mostrarInformacionPersonaje(fichero) {
 	
 	var nombre = document.createElement("p");			
 	nombre.appendChild(document.createTextNode("Name: " + fichero.name));
+	mostrarConTabulacion(menu,nombre); // tabulamos el nombre
+	
 	var height = document.createElement("p");
 	height.appendChild(document.createTextNode("Height: " + fichero.height));
+	mostrarConTabulacion(menu,height); // tabulamos la altura
+	
 	var mass = document.createElement("p");
 	mass.appendChild(document.createTextNode("Mass: " + fichero.mass));
+	mostrarConTabulacion(menu,mass); // tabulamos el peso
+	
 	var hairColor = document.createElement("p");
 	hairColor.appendChild(document.createTextNode("Hair Color: " + fichero.hair_color));
+	mostrarConTabulacion(menu,hairColor); // tabulamos el color de pelo
+	
 	var skinColor = document.createElement("p");
 	skinColor.appendChild(document.createTextNode("Skin Color: " + fichero.skin_color));
+	mostrarConTabulacion(menu,skinColor); // tabulamos el color de piel
+	
 	var eyeColor = document.createElement("p");
 	eyeColor.appendChild(document.createTextNode("Eye Color: " + fichero.eye_color));
+	mostrarConTabulacion(menu,eyeColor); // tabulamos el color de ojos
+	
 	var birth = document.createElement("p");
 	birth.appendChild(document.createTextNode("Birth year: " + fichero.birth_year));
+	mostrarConTabulacion(menu,birth); // tabulamos el año de nacimiento
+	
 	var gender = document.createElement("p");
 	gender.appendChild(document.createTextNode("Gender: " + fichero.gender));
+	mostrarConTabulacion(menu,gender); // tabulamos el género
 	
 	divDatos.appendChild(nombre);
 	divDatos.appendChild(height);
@@ -901,22 +939,39 @@ function mostrarInformacionPlaneta(fichero) {
 	
 	var nombre = document.createElement("p");			
 	nombre.appendChild(document.createTextNode("Name: " + fichero.name));
+	mostrarConTabulacion(menu,nombre);
+	
 	var rotation = document.createElement("p");
 	rotation.appendChild(document.createTextNode("Rotation Period: " + fichero.rotation_period));
+	mostrarConTabulacion(menu,rotation);
+	
 	var orbital = document.createElement("p");
 	orbital.appendChild(document.createTextNode("Orbital Period: " + fichero.orbital_period));
+	mostrarConTabulacion(menu,orbital);
+	
 	var diameter = document.createElement("p");
 	diameter.appendChild(document.createTextNode("Diameter: " + fichero.diameter));
+	mostrarConTabulacion(menu,diameter);
+	
 	var climate = document.createElement("p");
 	climate.appendChild(document.createTextNode("Climate: " + fichero.climate));
+	mostrarConTabulacion(menu,climate);
+	
 	var gravity = document.createElement("p");
 	gravity.appendChild(document.createTextNode("Gravity: " + fichero.gravity));
+	mostrarConTabulacion(menu,gravity);
+	
 	var terrain = document.createElement("p");
 	terrain.appendChild(document.createTextNode("Terrain: " + fichero.terrain));
+	mostrarConTabulacion(menu,terrain);
+	
 	var surfaceWater = document.createElement("p");
 	surfaceWater.appendChild(document.createTextNode("Surface Water: " + fichero.surface_water));
+	mostrarConTabulacion(menu,surfaceWater);
+	
 	var population = document.createElement("p");
 	population.appendChild(document.createTextNode("Population: " + fichero.population));
+	mostrarConTabulacion(menu,population);
 	
 	divDatos.appendChild(nombre);
 	divDatos.appendChild(rotation);
@@ -949,27 +1004,44 @@ function mostrarInformacionEspecie(fichero) {
 	
 	var nombre = document.createElement("p");			
 	nombre.appendChild(document.createTextNode("Name: " + fichero.name));
+	mostrarConTabulacion(menu,nombre);
+	
 	var clasificacion = document.createElement("p");
 	clasificacion.appendChild(document.createTextNode("Classification: " + fichero.classification));
+	mostrarConTabulacion(menu,clasificacion);
+	
 	var designation = document.createElement("p");
 	designation.appendChild(document.createTextNode("Designation: " + fichero.designation));
-	var height = document.createElement("p");
-	height.appendChild(document.createTextNode("Average Height: " + fichero.average_height));
+	mostrarConTabulacion(menu,designation);
+	
+	var heightE = document.createElement("p");
+	heightE.appendChild(document.createTextNode("Average Height: " + fichero.average_height));
+	mostrarConTabulacion(menu,heightE);
+	
 	var hairColors = document.createElement("p");
 	hairColors.appendChild(document.createTextNode("Hair Colors: " + fichero.hair_colors));
+	mostrarConTabulacion(menu,hairColors);
+	
 	var skinColors = document.createElement("p");
 	skinColors.appendChild(document.createTextNode("Skin Colors: " + fichero.skin_colors));
+	mostrarConTabulacion(menu,skinColors);
+	
 	var eyeColors = document.createElement("p");
 	eyeColors.appendChild(document.createTextNode("Eye Colors: " + fichero.eye_colors));
+	mostrarConTabulacion(menu,eyeColors);
+	
 	var lifespan = document.createElement("p");
 	lifespan.appendChild(document.createTextNode("Average Lifespan: " + fichero.average_lifespan));
+	mostrarConTabulacion(menu,lifespan);
+	
 	var language = document.createElement("p");
 	language.appendChild(document.createTextNode("Language: " + fichero.language));
+	mostrarConTabulacion(menu,language);
 	
 	divDatos.appendChild(nombre);
 	divDatos.appendChild(clasificacion);
 	divDatos.appendChild(designation);
-	divDatos.appendChild(height);
+	divDatos.appendChild(heightE);
 	divDatos.appendChild(hairColors);
 	divDatos.appendChild(skinColors);
 	divDatos.appendChild(eyeColors);
@@ -997,30 +1069,55 @@ function mostrarInformacionNave(fichero) {
 	
 	var nombre = document.createElement("p");			
 	nombre.appendChild(document.createTextNode("Name: " + fichero.name));
+	mostrarConTabulacion(menu,nombre);
+	
 	var model = document.createElement("p");
 	model.appendChild(document.createTextNode("Model: " + fichero.model));
+	mostrarConTabulacion(menu,model);
+	
 	var manufacturer = document.createElement("p");
 	manufacturer.appendChild(document.createTextNode("Manufacturer: " + fichero.manufacturer));
+	mostrarConTabulacion(menu,manufacturer);
+	
 	var cost = document.createElement("p");
 	cost.appendChild(document.createTextNode("Cost: " + fichero.cost_in_credits));
+	mostrarConTabulacion(menu,cost);
+	
 	var longitud = document.createElement("p");
 	longitud.appendChild(document.createTextNode("Length: " + fichero.length));
+	mostrarConTabulacion(menu,longitud);
+	
 	var speed = document.createElement("p");
 	speed.appendChild(document.createTextNode("Max Atmosphering Speed: " + fichero.max_atmosphering_speed));
+	mostrarConTabulacion(menu,speed);
+	
 	var crew = document.createElement("p");
 	crew.appendChild(document.createTextNode("Crew: " + fichero.crew));
+	mostrarConTabulacion(menu,crew);
+	
 	var passengers = document.createElement("p");
 	passengers.appendChild(document.createTextNode("Passengers: " + fichero.passengers));
+	mostrarConTabulacion(menu,passengers);
+	
 	var cargo = document.createElement("p");
 	cargo.appendChild(document.createTextNode("Cargo Capacity: " + fichero.cargo_capacity));
+	mostrarConTabulacion(menu,cargo);
+	
 	var consumables = document.createElement("p");
 	consumables.appendChild(document.createTextNode("Consumables: " + fichero.consumables));
+	mostrarConTabulacion(menu,consumables);
+	
 	var hyperdrive = document.createElement("p");
 	hyperdrive.appendChild(document.createTextNode("Hyperdrive Rating: " + fichero.hyperdrive_rating));
+	mostrarConTabulacion(menu,hyperdrive);
+	
 	var mglt = document.createElement("p");
 	mglt.appendChild(document.createTextNode("MGLT: " + fichero.mglt));
+	mostrarConTabulacion(menu,mglt);
+	
 	var sclass = document.createElement("p");
 	sclass.appendChild(document.createTextNode("Starship Class: " + fichero.starship_class));
+	mostrarConTabulacion(menu,sclass);
 	
 	divDatos.appendChild(nombre);
 	divDatos.appendChild(model);
@@ -1055,29 +1152,51 @@ function mostrarInformacionVehiculo(fichero) {
 	var divDatos = document.createElement("div");
 	divDatos.style.position = "relative";	
 	divDatos.style.top = ( imagenVehiculo.height + 5 ) + "px";
+	divDatos.style.width = "350px";
 	
 	var nombre = document.createElement("p");			
 	nombre.appendChild(document.createTextNode("Name: " + fichero.name)); 
+	mostrarConTabulacion(menu,nombre);
+	
 	var model = document.createElement("p");
 	model.appendChild(document.createTextNode("Model: " + fichero.model));
+	mostrarConTabulacion(menu,model);
+	
 	var manufacturer = document.createElement("p");
 	manufacturer.appendChild(document.createTextNode("Manufacturer: " + fichero.manufacturer));
+	mostrarConTabulacion(menu,manufacturer);
+	
 	var cost = document.createElement("p");
 	cost.appendChild(document.createTextNode("Cost: " + fichero.cost_in_credits));
+	mostrarConTabulacion(menu,cost);
+	
 	var longitud = document.createElement("p");
 	longitud.appendChild(document.createTextNode("Length: " + fichero.length));
+	mostrarConTabulacion(menu,longitud);
+	
 	var speed = document.createElement("p");
 	speed.appendChild(document.createTextNode("Max Atmosphering Speed: " + fichero.max_atmosphering_speed));
+	mostrarConTabulacion(menu,speed);
+	
 	var crew = document.createElement("p");
 	crew.appendChild(document.createTextNode("Crew: " + fichero.crew));
+	mostrarConTabulacion(menu,crew);
+	
 	var passengers = document.createElement("p");
 	passengers.appendChild(document.createTextNode("Passengers: " + fichero.passengers));
+	mostrarConTabulacion(menu,passengers);
+	
 	var cargo = document.createElement("p");
 	cargo.appendChild(document.createTextNode("Cargo Capacity: " + fichero.cargo_capacity));
+	mostrarConTabulacion(menu,cargo);
+	
 	var consumables = document.createElement("p");
 	consumables.appendChild(document.createTextNode("Consumables: " + fichero.consumables));
+	mostrarConTabulacion(menu,consumables);
+	
 	var vclass = document.createElement("p");
 	vclass.appendChild(document.createTextNode("Vehicle Class: " + fichero.vehicle_class));
+	mostrarConTabulacion(menu,vclass);
 	
 	divDatos.appendChild(nombre);
 	divDatos.appendChild(model);
@@ -1270,7 +1389,6 @@ function modificarIndice() {
 function reproducirOPausar(){
 	if(!cancionParaReproducir.paused && !cancionParaReproducir.ended){
 		cancionParaReproducir.pause();
-		cancionParaReproducir.currentTime = 0;
 		reproducir.value = 'Play';
 		clearInterval(bucle);
 	}
