@@ -163,6 +163,10 @@ function buscar(cadenaABuscar,indiceTipos,contador,primeraBusqueda) {
 			}
 		}
 	}
+	else { // se ha dejado en blanco el recuadro de busqueda
+		crearMenuBusquedaFallida(divContenedor,cadenaABuscar);
+		setTimeout(limpiarMenuBusquedaFallida,3000);
+	}
 }
 
 function actualizarParametrosBusqueda(cadenaABuscar,indiceTipos,contador,tipoEvaluado) {
@@ -239,7 +243,13 @@ function crearMenuBusquedaFallida(elem,cadenaABuscar) {
 	menu.style.border = "4px solid red";
 	
 	var parrafoCargando = document.createElement("p");
-	parrafoCargando.appendChild(document.createTextNode("Lo sentimos, no se ha encontrado ningún archivo que coincida con '"+cadenaABuscar+"'"));
+	if (cadenaABuscar == "") {
+		parrafoCargando.appendChild(document.createTextNode("Debe introducir algún dato para poder buscar información"));
+	}
+	else {
+		parrafoCargando.appendChild(document.createTextNode("Lo sentimos, no se ha encontrado ningún archivo que coincida con '"+cadenaABuscar+"'"));
+	}
+	
 	parrafoCargando.style.textAlign = "center";
 	menu.appendChild(parrafoCargando);
 	
