@@ -769,6 +769,7 @@ function descargaJSon(tipo,idDato) {
 	// Preparar la funcion de respuesta
 	peticion_http.onreadystatechange = muestraContenido;
 	// Realizar peticion HTTP
+	console.log("Se llama a https://swapi.dev/api/"+tipo+"/"+idDato+"/");
 	peticion_http.open('GET',"https://swapi.dev/api/"+tipo+"/"+idDato+"/", true);
 	peticion_http.send(null);
 	function muestraContenido() {
