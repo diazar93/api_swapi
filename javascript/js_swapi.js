@@ -107,7 +107,7 @@ function buscar(cadenaABuscar,indiceTipos,contador,primeraBusqueda) {
 		// Realizar peticion HTTP
 		var tipos = ["films","people","planets","species","starships","vehicles"];
 		tipoEvaluado = tipos[indiceTipos];
-		peticion_http.open('GET',"https://swapi.co/api/"+tipoEvaluado+"/"+contador+"/", true);	
+		peticion_http.open('GET',"https://swapi.dev/api/"+tipoEvaluado+"/"+contador+"/", true);	
 		peticion_http.send(null);
 		
 		function muestraContenido() {
@@ -345,7 +345,7 @@ function navegarA(tipo,idPag,indiceActual,esAvance,existenBotones) {
 	// Preparar la funcion de respuesta
 	peticion_http.onreadystatechange = muestraContenido;
 	// Realizar peticion HTTP
-	peticion_http.open('GET',"https://swapi.co/api/"+tipo+"/?page="+idPag, true);
+	peticion_http.open('GET',"https://swapi.dev/api/"+tipo+"/?page="+idPag, true);
 	peticion_http.send(null);
 	function muestraContenido() {
 		if(peticion_http.readyState == 4) {
@@ -769,7 +769,7 @@ function descargaJSon(tipo,idDato) {
 	// Preparar la funcion de respuesta
 	peticion_http.onreadystatechange = muestraContenido;
 	// Realizar peticion HTTP
-	peticion_http.open('GET',"https://swapi.co/api/"+tipo+"/"+idDato, true);
+	peticion_http.open('GET',"https://swapi.dev/api/"+tipo+"/"+idDato, true);
 	peticion_http.send(null);
 	function muestraContenido() {
 		if(peticion_http.readyState == 4) {
